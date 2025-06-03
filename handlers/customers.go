@@ -13,19 +13,19 @@ func GetCustomers(c *gin.Context) {
 	uuid := c.Query("uuid")
 	cod_cpf := c.Query("cod_cpf")
 	desc_email := c.Query("desc_email")
-	id_twitch := c.Query("id_twitch")
-	id_youtube := c.Query("id_youtube")
-	id_blue_sky := c.Query("id_blue_sky")
-	id_instagram := c.Query("id_instagram")
+	twitch := c.Query("twitch")
+	youtube := c.Query("youtube")
+	blue_sky := c.Query("blue_sky")
+	instagram := c.Query("instagram")
 
 	customers := models.GetCustomer(
 		uuid,
 		cod_cpf,
 		desc_email,
-		id_twitch,
-		id_youtube,
-		id_blue_sky,
-		id_instagram,
+		twitch,
+		youtube,
+		blue_sky,
+		instagram,
 		dbConnection,
 	)
 
