@@ -79,20 +79,52 @@ func PutCustomer(c *gin.Context) {
 
 	id := c.Param("id")
 
-	var customer *models.Customer
+	var newCustomer, oldCustomer *models.Customer
 
-	res := dbConnection.First(&customer, "uuid = ?", id)
+	res := dbConnection.First(&oldCustomer, "uuid = ?", id)
 	if res.Error != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "usuário não encontrado"})
 		return
 	}
 
-	if err := c.ShouldBindJSON(&customer); err != nil {
+	if err := c.ShouldBindJSON(&newCustomer); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	res = dbConnection.Save(customer)
+	newCustomer.UUID = oldCustomer.UUID
+	newCustomer.NrPoints = oldCustomer.NrPoints
+	newCustomer.CreatedAt = oldCustomer.CreatedAt
+
+	if newCustomer.DescCustomerName == "" {
+		newCustomer.DescCustomerName = oldCustomer.DescCustomerName
+	}
+
+	if newCustomer.CodCPF == nil {
+		newCustomer.CodCPF = oldCustomer.CodCPF
+	}
+
+	if newCustomer.DescEmail == nil {
+		newCustomer.DescEmail = oldCustomer.DescEmail
+	}
+
+	if newCustomer.IdTwitch == nil {
+		newCustomer.IdTwitch = oldCustomer.IdTwitch
+	}
+
+	if newCustomer.IdYouTube == nil {
+		newCustomer.IdYouTube = oldCustomer.IdYouTube
+	}
+
+	if newCustomer.IdBlueSky == nil {
+		newCustomer.IdBlueSky = oldCustomer.IdBlueSky
+	}
+
+	if newCustomer.IdInstagram == nil {
+		newCustomer.IdInstagram = oldCustomer.IdInstagram
+	}
+
+	res = dbConnection.Save(newCustomer)
 	if res.Error != nil {
 		res.Rollback()
 		c.JSON(http.StatusBadRequest, gin.H{"error": res.Error.Error()})
