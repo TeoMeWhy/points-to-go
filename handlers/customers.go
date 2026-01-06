@@ -96,34 +96,6 @@ func PutCustomer(c *gin.Context) {
 	newCustomer.NrPoints = oldCustomer.NrPoints
 	newCustomer.CreatedAt = oldCustomer.CreatedAt
 
-	if newCustomer.DescCustomerName == "" {
-		newCustomer.DescCustomerName = oldCustomer.DescCustomerName
-	}
-
-	if newCustomer.CodCPF == nil {
-		newCustomer.CodCPF = oldCustomer.CodCPF
-	}
-
-	if newCustomer.DescEmail == nil {
-		newCustomer.DescEmail = oldCustomer.DescEmail
-	}
-
-	if newCustomer.IdTwitch == nil {
-		newCustomer.IdTwitch = oldCustomer.IdTwitch
-	}
-
-	if newCustomer.IdYouTube == nil {
-		newCustomer.IdYouTube = oldCustomer.IdYouTube
-	}
-
-	if newCustomer.IdBlueSky == nil {
-		newCustomer.IdBlueSky = oldCustomer.IdBlueSky
-	}
-
-	if newCustomer.IdInstagram == nil {
-		newCustomer.IdInstagram = oldCustomer.IdInstagram
-	}
-
 	res = dbConnection.Save(newCustomer)
 	if res.Error != nil {
 		res.Rollback()
