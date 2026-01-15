@@ -2,9 +2,11 @@ package main
 
 import (
 	"log"
+	"points/controllers"
 	"points/db"
-	"points/handlers"
 	"points/models"
+	"points/repositories"
+	"points/services"
 
 	"github.com/gin-gonic/gin"
 )
@@ -23,7 +25,9 @@ func main() {
 	r := gin.Default()
 	r.Use(gin.Recovery())
 
-	controller := handlers.NewController(db)
+	pointsRepo := repositories.NewPointsRepo(db)
+	pointsService := services.NewPointsService(pointsRepo)
+	controller := controllers.NewController(pointsService)
 
 	r.GET("customers/:id", controller.GetCustomerByID)
 	r.GET("customers/", controller.GetCustomers)
