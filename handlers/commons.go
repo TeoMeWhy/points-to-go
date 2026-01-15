@@ -1,13 +1,20 @@
 package handlers
 
 import (
-	"points/db"
 	"points/models"
 
 	"gorm.io/gorm"
 )
 
-var dbConnection, _ = db.OpenDBConnection()
+type PayloadMigrationCustomer struct {
+	Customer1UUID string `json:"customer_1" binding:"required"`
+	Customer2UUID string `json:"customer_2" binding:"required"`
+}
+
+type PayloadTransaction struct {
+	models.Transaction
+	Products []models.TransactionProduct `json:"products" binding:"required"`
+}
 
 func TransactionProcess(
 	c *models.Customer,
@@ -15,7 +22,7 @@ func TransactionProcess(
 	ps []models.TransactionProduct,
 	db *gorm.DB) error {
 
-	tx := dbConnection.Begin()
+	tx := db.Begin()
 	defer tx.Commit()
 
 	res := tx.Create(t)
