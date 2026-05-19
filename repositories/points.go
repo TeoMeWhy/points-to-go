@@ -112,6 +112,62 @@ func (pr *PointsRepo) CreateTransactionWithProducts(c *models.Customer, t *model
 	return nil
 }
 
+func (pr *PointsRepo) GetLastUserTransacionDateByCodProduct(customerID, codProduct string) (string, error) {
+
+	query := `
+	SELECT max(DATE(t1.created_at)) AS last_date
+
+	FROM points.transactions AS t1
+
+	INNER JOIN points.transaction_products AS t2
+	ON t1.uuid = t2.id_transaction
+
+	LEFT JOIN points.products AS t3
+	ON t2.cod_product = t3.uuid
+
+	WHERE t1.created_at >= date(DATE_ADD(now(), INTERVAL -1 DAY))
+	AND t1.id_customer = ?
+	AND t3.uuid = ?
+
+	ORDER BY t1.created_at DESC`
+
+	var lastDate string
+	result := pr.db.Raw(query, customerID, codProduct).Scan(&lastDate)
+	if result.Error != nil {
+		return "", result.Error
+	}
+
+	return lastDate, nil
+}
+
+func (pr *PointsRepo) GetLastUserTransacionDateByCategory(customerID, category string) (string, error) {
+
+	query := `
+	SELECT max(DATE(t1.created_at)) AS last_date
+
+	FROM points.transactions AS t1
+
+	INNER JOIN points.transaction_products AS t2
+	ON t1.uuid = t2.id_transaction
+
+	LEFT JOIN points.products AS t3
+	ON t2.cod_product = t3.uuid
+
+	WHERE t1.created_at >= date(DATE_ADD(now(), INTERVAL -1 DAY))
+	AND t1.id_customer = ?
+	AND t3.desc_product_category = ?
+
+	ORDER BY t1.created_at DESC`
+
+	var lastDate string
+	result := pr.db.Raw(query, customerID, category).Scan(&lastDate)
+	if result.Error != nil {
+		return "", result.Error
+	}
+
+	return lastDate, nil
+}
+
 func (pr *PointsRepo) UpdateTransactions(txs []models.Transaction) error {
 	return updateTransactions(txs, pr.db)
 }

@@ -123,6 +123,34 @@ func (ctrl *Controller) PostTransaction(c *gin.Context) {
 	c.JSON(http.StatusCreated, gin.H{"status": "transacao criada e pontos do usuário atualizados"})
 }
 
+func (ctrl *Controller) GetLastCustomerTransactionDateByCodProduct(c *gin.Context) {
+
+	customerID := c.Param("customerID")
+	codProduct := c.Param("codProduct")
+
+	date, err := ctrl.PointsService.GetLastCustomerTransactionDateByCodProduct(customerID, codProduct)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"last_transaction_date": date})
+}
+
+func (ctrl *Controller) GetLastCustomerTransactionDateByCategory(c *gin.Context) {
+
+	customerID := c.Param("customerID")
+	category := c.Param("category")
+
+	date, err := ctrl.PointsService.GetLastCustomerTransactionDateByCategory(customerID, category)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"last_transaction_date": date})
+}
+
 func (ctrl *Controller) MigrateCustomers(c *gin.Context) {
 
 	payload := &services.PayloadMigrationCustomer{}

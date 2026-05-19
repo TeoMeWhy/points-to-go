@@ -83,6 +83,14 @@ func (ps *PointsService) MakeTransaction(payload *PayloadTransaction) error {
 	return nil
 }
 
+func (ps *PointsService) GetLastCustomerTransactionDateByCodProduct(customerID, codProduct string) (string, error) {
+	return ps.PointsRepo.GetLastUserTransacionDateByCodProduct(customerID, codProduct)
+}
+
+func (ps *PointsService) GetLastCustomerTransactionDateByCategory(customerID, category string) (string, error) {
+	return ps.PointsRepo.GetLastUserTransacionDateByCategory(customerID, category)
+}
+
 func NewPointsService(pointsRepo *repositories.PointsRepo) *PointsService {
 	return &PointsService{
 		PointsRepo: pointsRepo,
