@@ -36,6 +36,9 @@ func main() {
 
 	r.POST("/transactions", controller.PostTransaction)
 
+	r.GET("/last_transaction_product/:customerID/:codProduct", controller.GetLastCustomerTransactionDateByCodProduct)
+	r.GET("/last_transaction_category/:customerID/:category", controller.GetLastCustomerTransactionDateByCategory)
+
 	r.PUT("/migrate_customers", controller.MigrateCustomers)
 
 	r.Run("0.0.0.0:8081")
