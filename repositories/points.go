@@ -83,6 +83,11 @@ func (pr *PointsRepo) DeleteCustomer(c *models.Customer) error {
 }
 
 func (pr *PointsRepo) UpdateCustomer(c *models.Customer) error {
+
+	if c.DescEmail != nil && *c.DescEmail == "" {
+		c.DescEmail = nil
+	}
+
 	return updateCustomer(c, pr.db)
 }
 
